@@ -4,6 +4,7 @@ Package.describe({
 });
 
 Package.on_use(function(api) {
+  api.use('png', 'server')
   api.export('PSD', 'server');
-  api.add_files('psd.js', 'server');
+  api.add_files('psd.js', ['server','client']);
 });

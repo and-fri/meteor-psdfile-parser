@@ -328,13 +328,15 @@ var jspack = new JSPack(); ;
     return assert;
   })(assert);
 
-  if (typeof exports !== "undefined" && exports !== null) {
-    Root = exports;
-    fs = require('fs');
-  } else {
-    Root = window;
-  }
-
+  // if (typeof exports !== "undefined" && exports !== null) {
+  //   Root = exports;
+  //   fs = require('fs');
+  // } else {
+  //   Root = window;
+  // }
+  Root = Meteor;
+  fs = Npm.require('fs');
+  
   Root.PSD = PSD = (function() {
 
     PSD.name = 'PSD';
