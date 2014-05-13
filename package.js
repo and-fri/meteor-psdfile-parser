@@ -1,6 +1,6 @@
 Package.describe({
   name: "psdfile-parser",
-  summary: "Easy geocoding by way of the node-geocoder package"
+  summary: "A Photoshop file format (PSD) parser."
 });
 
 Package.on_use(function(api) {

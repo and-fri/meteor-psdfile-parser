@@ -1,6 +1,6 @@
 {
   "name": "psdfile-parser",
-  "description": "",
+  "description": "A Photoshop file format (PSD) parser",
   "homepage": "https://github.com/and-fri/meteor-psdfile-parser",
   "author": "Andrej Fritz",
   "version": "0.0.1",
