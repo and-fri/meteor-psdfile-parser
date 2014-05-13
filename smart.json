@@ -1,0 +1,11 @@
+{
+  "name": "psdfile-parser",
+  "description": "",
+  "homepage": "https://github.com/and-fri/meteor-psdfile-parser",
+  "author": "Andrej Fritz",
+  "version": "0.0.1",
+  "git": "https://github.com/and-fri/meteor-psdfile-parser.git",
+  "packages": {
+    "png":{}
+  }
+}
