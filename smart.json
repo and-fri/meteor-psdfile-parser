@@ -1,11 +1,9 @@
 {
   "name": "psdfile-parser",
-  "description": "A Photoshop file format (PSD) parser",
+  "description": "A Photoshop file format (PSD) parser. Can export PNGs and Thumbnails...",
   "homepage": "https://github.com/and-fri/meteor-psdfile-parser",
   "author": "Andrej Fritz",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "git": "https://github.com/and-fri/meteor-psdfile-parser.git",
-  "packages": {
-    "png":"0.0.2"
-  }
+  "packages": {}
 }

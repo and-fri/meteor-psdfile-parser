@@ -310,10 +310,16 @@ var jspack = new JSPack(); ;
   var Log, PSD, PSDBrightnessContrast, PSDChannelImage, PSDColor, PSDColorBalance, PSDCurves, PSDDropDownLayerEffect, PSDFile, PSDHeader, PSDHueSaturation, PSDImage, PSDInvert, PSDLayer, PSDLayerEffect, PSDLayerEffectCommonStateInfo, PSDLayerMask, PSDLevels, PSDPosterize, PSDResource, PSDSelectiveColor, PSDThreshold, Root, Util, assert, fs,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
+    
+  // THIS IS METEOR !!!
+  if (Meteor.isServer) {
+    exports = Meteor;
+  } else {
+    exports = undefined;
+  }
   assert = (function(assert) {
     if (typeof exports !== "undefined" && exports !== null) {
-      return require('assert');
+      return Npm.require('assert');
     }
     assert = function(test) {
       if (test !== true) {
@@ -328,22 +334,20 @@ var jspack = new JSPack(); ;
     return assert;
   })(assert);
 
-  // if (typeof exports !== "undefined" && exports !== null) {
-  //   Root = exports;
-  //   fs = require('fs');
-  // } else {
-  //   Root = window;
-  // }
-  Root = Meteor;
-  fs = Npm.require('fs');
-  
+  if (typeof exports !== "undefined" && exports !== null) {
+    Root = exports;
+    fs = Npm.require('fs');
+  } else {
+    // Root = window;
+  }
+
   Root.PSD = PSD = (function() {
 
     PSD.name = 'PSD';
 
     PSD.VERSION = "0.4.2";
 
-    PSD.DEBUG = false;
+    PSD.DEBUG = true;
 
     PSD.fromFile = function(file, cb) {
       var data, reader;
@@ -524,14 +528,26 @@ var jspack = new JSPack(); ;
       if (!this.image) {
         this.parseImageData();
       }
+      console.log("geparsed...");
       return this.image.toFile(filename, cb);
     };
+
 
     PSD.prototype.toFileSync = function(filename) {
       if (!this.image) {
         this.parseImageData();
       }
       return this.image.toFileSync(filename);
+    };
+
+    PSD.prototype.toFileWithResolution = function(filename, imgWidth, imgHeight, cb) {
+      if (cb == null) {
+        cb = function() {};
+      }
+      if (!this.image) {
+        this.parseImageData();
+      }
+      return this.image.toFileWithResolution(filename, imgWidth, imgHeight, cb);
     };
 
     PSD.prototype.toCanvas = function(canvas, width, height) {
@@ -548,6 +564,7 @@ var jspack = new JSPack(); ;
     };
 
     PSD.prototype.toImage = function() {
+      console.log("gesund ?");
       if (!this.image) {
         this.parseImageData();
       }
@@ -1294,7 +1311,7 @@ var jspack = new JSPack(); ;
         default:
           Log.debug("Unknown image compression. Attempting to skip.");
           return this.file.seek(this.endPos, false);
-      }
+      }            
       return this.processImageData();
     };
 
@@ -1403,40 +1420,50 @@ var jspack = new JSPack(); ;
         case 1:
           if (this.getImageDepth() === 8) {
             this.combineGreyscale8Channel();
+            console.log("gesund durch combineGreyscale8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineGreyscale16Channel();
+            console.log("gesund durch combineGreyscale16Channel");
           }
           break;
         case 3:
           if (this.getImageDepth() === 8) {
             this.combineRGB8Channel();
+            console.log("gesund durch combineRGB8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineRGB16Channel();
+            console.log("gesund durch combineRGB16Channel");
           }
           break;
         case 4:
           if (this.getImageDepth() === 8) {
             this.combineCMYK8Channel();
+            console.log("gesund durch combineCMYK8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineCMYK16Channel();
-          }
+            console.log("gesund durch combineCMYK16Channel");
+          }          
           break;
         case 7:
           this.combineMultiChannel8();
+          console.log("gesund durch combineMultiChannel8");
           break;
         case 9:
           if (this.getImageDepth() === 8) {
             this.combineLAB8Channel();
+            console.log("gesund durch combineLAB8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineLAB16Channel();
+            console.log("gesund durch combineLAB16Channel");
           }
-      }
+      }      
       return delete this.channelData;
     };
+
 
     PSDImage.prototype.getAlphaValue = function(alpha) {
       if (alpha == null) {
@@ -1675,6 +1702,7 @@ var jspack = new JSPack(); ;
       return this.pixelData;
     };
 
+
     PSDImage.prototype.toFile = function(filename, cb) {
       var png;
       if (this.toCanvasPixels().length === 0) {
@@ -1689,6 +1717,23 @@ var jspack = new JSPack(); ;
       });
     };
 
+    PSDImage.prototype.toFileWithResolution = function(filename, imgWidth, imgHeight, cb) {
+      var png;
+      if (this.toCanvasPixels().length === 0) {
+        return cb();
+      }
+      png = this.getPng();
+      if (png === null) {
+        return cb();
+      }      
+      gm = Npm.require('gm');      
+      return png.encode(function(image) {
+        gmImage = gm(image, filename)
+        gmImage = gmImage.resize(imgWidth,imgHeight)        
+        return gmImage.write(filename, cb);
+      });
+    };
+
     PSDImage.prototype.toFileSync = function(filename) {
       var image, png;
       if (this.toCanvasPixels().length === 0) {
@@ -1698,20 +1743,23 @@ var jspack = new JSPack(); ;
       if (png === null) {
         return;
       }
+      console.log("encoding...");
       image = png.encodeSync();
+      console.log("should be an image now");
+      
       return fs.writeFileSync(filename, image);
     };
 
     PSDImage.prototype.getPng = function() {
       var Png, buffer, i, pixelData, _i, _ref;
       try {
-        Png = require('node-png').Png;
+        Png = Npm.require('png').Png;
       } catch (e) {
         throw "Exporting PSDs to file requires the node-png library";
       }
       buffer = new Buffer(this.toCanvasPixels().length);
       pixelData = this.toCanvasPixels();
-      for (i = _i = 0, _ref = pixelData.length; _i < _ref; i = _i += 4) {
+      for (i = _i = 0, _ref = pixelData.length; _i < _ref; i = _i += 4) {        
         buffer[i] = pixelData[i];
         buffer[i + 1] = pixelData[i + 1];
         buffer[i + 2] = pixelData[i + 2];
@@ -1745,6 +1793,7 @@ var jspack = new JSPack(); ;
         pxl = _ref[i];
         pixelData[i] = pxl;
       }
+      console.log("canvas done");
       return context.putImageData(imageData, 0, 0);
     };
 
