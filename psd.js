@@ -338,7 +338,7 @@ var jspack = new JSPack(); ;
     Root = exports;
     fs = Npm.require('fs');
   } else {
-    // Root = window;
+    Root = window;
   }
 
   Root.PSD = PSD = (function() {
