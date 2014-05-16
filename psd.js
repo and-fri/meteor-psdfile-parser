@@ -347,7 +347,7 @@ var jspack = new JSPack(); ;
 
     PSD.VERSION = "0.4.2";
 
-    PSD.DEBUG = true;
+    PSD.DEBUG = false;
 
     PSD.fromFile = function(file, cb) {
       var data, reader;
@@ -528,7 +528,7 @@ var jspack = new JSPack(); ;
       if (!this.image) {
         this.parseImageData();
       }
-      console.log("geparsed...");
+      // console.log("geparsed...");
       return this.image.toFile(filename, cb);
     };
 
@@ -564,7 +564,7 @@ var jspack = new JSPack(); ;
     };
 
     PSD.prototype.toImage = function() {
-      console.log("gesund ?");
+      // console.log("gesund ?");
       if (!this.image) {
         this.parseImageData();
       }
@@ -1420,45 +1420,45 @@ var jspack = new JSPack(); ;
         case 1:
           if (this.getImageDepth() === 8) {
             this.combineGreyscale8Channel();
-            console.log("gesund durch combineGreyscale8Channel");
+            // console.log("gesund durch combineGreyscale8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineGreyscale16Channel();
-            console.log("gesund durch combineGreyscale16Channel");
+            // console.log("gesund durch combineGreyscale16Channel");
           }
           break;
         case 3:
           if (this.getImageDepth() === 8) {
             this.combineRGB8Channel();
-            console.log("gesund durch combineRGB8Channel");
+            // console.log("gesund durch combineRGB8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineRGB16Channel();
-            console.log("gesund durch combineRGB16Channel");
+            // console.log("gesund durch combineRGB16Channel");
           }
           break;
         case 4:
           if (this.getImageDepth() === 8) {
             this.combineCMYK8Channel();
-            console.log("gesund durch combineCMYK8Channel");
+            // console.log("gesund durch combineCMYK8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineCMYK16Channel();
-            console.log("gesund durch combineCMYK16Channel");
+            // console.log("gesund durch combineCMYK16Channel");
           }          
           break;
         case 7:
           this.combineMultiChannel8();
-          console.log("gesund durch combineMultiChannel8");
+          // console.log("gesund durch combineMultiChannel8");
           break;
         case 9:
           if (this.getImageDepth() === 8) {
             this.combineLAB8Channel();
-            console.log("gesund durch combineLAB8Channel");
+            // console.log("gesund durch combineLAB8Channel");
           }
           if (this.getImageDepth() === 16) {
             this.combineLAB16Channel();
-            console.log("gesund durch combineLAB16Channel");
+            // console.log("gesund durch combineLAB16Channel");
           }
       }      
       return delete this.channelData;
@@ -1729,7 +1729,11 @@ var jspack = new JSPack(); ;
       gm = Npm.require('gm');      
       return png.encode(function(image) {
         gmImage = gm(image, filename)
-        gmImage = gmImage.resize(imgWidth,imgHeight)        
+        gmImage = gmImage.colorspace("RGB")        
+        gmImage = gmImage.resize(imgWidth,imgHeight)                
+        gmImage = gmImage.gravity("Center")
+        gmImage = gmImage.background("white") 
+        gmImage = gmImage.extent(imgWidth,imgHeight)
         return gmImage.write(filename, cb);
       });
     };
@@ -1743,9 +1747,9 @@ var jspack = new JSPack(); ;
       if (png === null) {
         return;
       }
-      console.log("encoding...");
+      // console.log("encoding...");
       image = png.encodeSync();
-      console.log("should be an image now");
+      // console.log("should be an image now");
       
       return fs.writeFileSync(filename, image);
     };
@@ -1793,7 +1797,7 @@ var jspack = new JSPack(); ;
         pxl = _ref[i];
         pixelData[i] = pxl;
       }
-      console.log("canvas done");
+      // console.log("canvas done");
       return context.putImageData(imageData, 0, 0);
     };
 
