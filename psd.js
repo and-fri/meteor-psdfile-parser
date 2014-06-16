@@ -1757,12 +1757,7 @@ var jspack = new JSPack(); ;
     PSDImage.prototype.getPng = function() {
       var Png, buffer, i, pixelData, _i, _ref;
       try {
-
-        console.log("HELLO THERE");
-        console.log(Npm.require('png'));
-        console.log(Npm.require('png').Png);
         Png = Npm.require('png').Png;
-
       } catch (e) {
         throw "Exporting PSDs to file requires the node-png library";
       }
