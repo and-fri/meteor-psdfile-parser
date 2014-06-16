@@ -3,7 +3,7 @@ Package.describe({
   summary: "A Photoshop file format (PSD) parser. Can export PNGs and Thumbnails..."
 });
 Npm.depends({
-  "png":"3.0.3",
+  "png":"https://github.com/herrBeesch/node-png/archive/0429db87585f1d17e027d930c160e31ef93e55d4",
   "gm":"1.16.0"
 });
 Package.on_use(function(api) {
