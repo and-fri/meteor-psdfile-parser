@@ -3,7 +3,7 @@ Package.describe({
   summary: "A Photoshop file format (PSD) parser. Can export PNGs and Thumbnails..."
 });
 Npm.depends({
-  "png":"https://github.com/herrBeesch/node-png/tarball/0429db87585f1d17e027d930c160e31ef93e55d4",
+  "png":"https://github.com/herrBeesch/node-png/tarball/a0939bd264d5d7930a8d4e509aa43405e971026e",
   "gm":"1.16.0"
 });
 Package.on_use(function(api) {
