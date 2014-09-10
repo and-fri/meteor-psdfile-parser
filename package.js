@@ -1,6 +1,6 @@
 Package.describe({
   name: "psdfile-parser",
-  summary: "A Photoshop file format (PSD) parser. Can export PNGs and Thumbnails..."
+  summary: "A Photoshop file format (PSD) parser. Can export PNGs and Thumbnails...",
   git: "https://github.com/andruschka/meteor-psdfile-parser.git"
 });
 Npm.depends({
